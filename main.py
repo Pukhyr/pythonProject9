@@ -32,8 +32,8 @@ def start_help(message: telebot.types.Message):
     text = f'{get_welcome()} Я бот, который подготовил для тебя интересный опрос✏\n\n'\
            f'Список команд:\n'\
            f'/get_all - получить общую статистику пользователей\n'\
-           f'/add_question- добавить заметку \n'\
-           f'/delete_question - удалить заметку'
+           f'/add_question- добавить вопрос \n'\
+           f'/delete_question - удалить вопрос'
 
     bot.send_message(message.chat.id, text)
 
@@ -44,7 +44,7 @@ def get_all(message: telebot.types.Message):
 @bot.message_handler(commands=['add_question'])
 def get_all(message: telebot.types.Message):
     bot.set_state(message.from_user.id, MyStates.question, message.chat.id)
-    bot.send_message(message.chat.id, 'Напишите вопрос')
+    bot.send_message(message.chat.id, 'Напишите номер вопроса и сам вопрос')
 
 
 @bot.message_handler(state=MyStates.question)

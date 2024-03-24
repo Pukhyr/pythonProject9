@@ -59,7 +59,7 @@ def save_question(question_text:str ):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute(""""INSERT INTO question VALUES (%s)""", (question_text, ))
+        cursor.execute(""""INSERT INTO question (question_text) VALUE (%s)""", (question_text, ))
         conn.commit()
         conn.close()
 
