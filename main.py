@@ -61,13 +61,14 @@ def add_question(message):
 def add_question(message):
     bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['answers'] = message.text.split(';')
+        data['answers'] = message.text.split('\n')
         for answer in data['answers']:
-            if len(answer) == 1:
+            stroka=answer.split(';')
+            if len(stroka) == 1:
                 bot.send_message(message.chat.id,'Не было ";" ')
-            elif len(answer) == 2:
-                number = answer[1]
-                content = answer[0]
+            elif len(stroka) == 2:
+                number = stroka[1]
+                content = stroka[0]
                 save_answer(answers=content, question_id=int(number))
             else:
                 bot.send_message(message.chat.id, 'Слишком много ";"')
