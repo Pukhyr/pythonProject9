@@ -51,7 +51,7 @@ def get_all(message: telebot.types.Message):
 
 @bot.message_handler(state=MyStates.question)
 def add_question(message):
-    bot.send_message(message.chat.id, "Отлично, теперь напишите варианты ответов на отдельных строчках")
+    bot.send_message(message.chat.id, "Отлично, теперь напишите варианты ответов на отдельных строчках и через ';' номер вопроса, к которому они относятся")
     bot.set_state(message.from_user.id, MyStates.answer, message.chat.id)
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['question'] = message.text
@@ -61,8 +61,16 @@ def add_question(message):
 def add_question(message):
     bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['answers'] = message.text
-        save_answer(data['answers'])
+        data['answers'] = message.text.split(';')
+        for answer in data['answers']:
+            if len(answer) == 1:
+                bot.send_message(message.chat.id,'Не было ";" ')
+            elif len(answer) == 2:
+                number = answer[1]
+                content = answer[0]
+                save_answer(answers=content, question_id=int(number))
+            else:
+                bot.send_message(message.chat.id, 'Слишком много ";"')
     bot.delete_state(message.from_user.id, message.chat.id)
 
 

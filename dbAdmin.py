@@ -62,7 +62,7 @@ def save_question(question_text:str ):
         cursor.execute("""INSERT INTO question (question_text) VALUES (%s)""", (question_text, ))
         conn.commit()
         conn.close()
-def save_answer(answers:str ):
+def save_answer(answers:str, question_id:int ):
     conn = psycopg2.connect(
         host='localhost',
         port=5432,
@@ -71,11 +71,11 @@ def save_answer(answers:str ):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""SELECT UNNEST(STRING_TO_ARRAY((%s), ' ') AS choice_text""", (answers, ))
+        cursor.execute("""INSERT INTO question (question_text) VALUES (%s), (%s)""", (answers, question_id ))
         conn.commit()
         conn.close()
 
 
 if __name__=='__main__':
-    save_answer('да нет')
+    save_answer('lf', 1)
     save_question('eubwdh?')
