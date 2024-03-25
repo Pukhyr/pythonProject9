@@ -49,7 +49,6 @@ def get_all(message: telebot.types.Message):
 
 @bot.message_handler(state=MyStates.question)
 def add_question(message):
-    bot.send_message(message.chat.id, 'Отлично, теперь напишите варианты ответов')
     bot.set_state(message.from_user.id, MyStates.answer, message.chat.id)
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['question'] = message.text
