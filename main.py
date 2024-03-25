@@ -9,7 +9,8 @@ from config import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
-from dbAdmin import createdb, get_user_stat, save_question
+from dbAdmin import createdb, get_user_stat, save_question, save_answer
+
 
 class MyStates(StatesGroup):
     question = State()
@@ -55,6 +56,15 @@ def add_question(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['question'] = message.text
         save_question(data['question'])
+
+@bot.message_handler(state=MyStates.answer)
+def add_question(message):
+    bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data['answers'] = message.text
+        save_answer(data['answers'])
+    bot.delete_state(message.from_user.id, message.chat.id)
+
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))
 
