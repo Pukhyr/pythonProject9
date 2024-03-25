@@ -78,5 +78,6 @@ def add_question(message):
 bot.add_custom_filter(custom_filters.StateFilter(bot))
 
 if __name__=='__main__':
+    createdb()
     print ('Бот запущен')
     bot.infinity_polling()

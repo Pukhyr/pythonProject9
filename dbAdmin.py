@@ -20,7 +20,7 @@ CREATE TABLE question (
 CREATE TABLE choice (
     id BIGSERIAL PRIMARY KEY,
     choice_text VARCHAR(255) NOT NULL,
-    votes INTEGER NOT NULL,
+    votes INTEGER,
     question_id BIGINT NOT NULL REFERENCES question(id)
 );
 
