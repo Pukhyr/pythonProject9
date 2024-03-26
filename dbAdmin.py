@@ -90,7 +90,7 @@ def get_question():
     conn.close()
     return str(all_records)
 
-def delete_questoin(number:int):
+def delete_questions(number:int):
     conn = psycopg2.connect(
         host='localhost',
         port=5432,

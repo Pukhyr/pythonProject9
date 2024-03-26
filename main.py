@@ -9,7 +9,7 @@ from config import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
-from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question
+from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions
 
 
 class MyStates(StatesGroup):
@@ -86,7 +86,7 @@ def add_question(message):
     bot.send_message(message.chat.id, "Вопрос, варианты ответа и статистика пользователей, ответивших на вопрос с этим номером, были удалены")
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['number'] = message.text
-        delete_question(data['number'])
+        delete_questions(data['number'])
     bot.delete_state(message.from_user.id, message.chat.id)
 
 
