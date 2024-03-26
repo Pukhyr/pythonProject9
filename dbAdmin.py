@@ -99,9 +99,9 @@ def delete_questions(number:int):
         dbname='test'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""DELETE FROM question WHERE id=(%s)""",(number, ))
-        cursor.execute("""DELETE FROM choice WHERE question_id=(%s)""",(number, ))
-        cursor.execute("""DELETE FROM user_stat WHERE question_id=(%s)""", (number, ))
+        cursor.execute("""DELETE FROM question WHERE id=(%d)""",(number, ))
+        cursor.execute("""DELETE FROM choice WHERE question_id=(%d)""",(number, ))
+        cursor.execute("""DELETE FROM user_stat WHERE question_id=(%d)""", (number, ))
         conn.commit()
     conn.close()
 
