@@ -108,3 +108,4 @@ def delete_questions(number:int):
 if __name__=='__main__':
     save_answer('lf', 1)
     save_question('eubwdh?')
+    delete_questions(5)
