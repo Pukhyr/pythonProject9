@@ -74,8 +74,38 @@ def save_answer(answers:str, question_id:int ):
         cursor.execute("""INSERT INTO choice (choice_text, question_id) VALUES (%s, %s)""", (answers, question_id ))
         conn.commit()
         conn.close()
+def get_question():
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""SELECT * FROM question""")
+        all_records=cursor.fetchall()
+        print (str(all_records))
+        conn.commit()
+    conn.close()
+    return str(all_records)
 
+def delete_questoin(number:int):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='test'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""DELETE FROM question WHERE id=(%s);
+        DELETE FROM choice WHERE question_id=(%s);
+        DELETE FROM user_stat WHERE question_id=(%s)""", (number, ))
+        conn.commit()
+    conn.close()
 
 if __name__=='__main__':
     save_answer('lf', 1)
     save_question('eubwdh?')
+    delete_questoin(5)

@@ -9,12 +9,13 @@ from config import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
-from dbAdmin import createdb, get_user_stat, save_question, save_answer
+from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question
 
 
 class MyStates(StatesGroup):
     question = State()
     answer= State()
+    delete= State()
 
 
 
@@ -74,10 +75,23 @@ def add_question(message):
                 bot.send_message(message.chat.id, 'Слишком много ";"')
     bot.delete_state(message.from_user.id, message.chat.id)
 
+@bot.message_handler(commands=['delete_question'])
+def delete_question(message: telebot.types.Message):
+    bot.set_state(message.from_user.id, MyStates.delete, message.chat.id)
+    bot.send_message(message.chat.id,'Выберите номер вопроса для удаления', get_question())
+
+@bot.message_handler(state=MyStates.delete)
+def add_question(message):
+    bot.send_message(message.chat.id, "Вопрос, варианты ответа и статистика пользователей, ответивших на вопрос с этим номером, были удалены")
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data['number'] = message.text
+        delete_question(data['number'])
+    bot.delete_state(message.from_user.id, message.chat.id)
+
+
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))
 
 if __name__=='__main__':
-    createdb()
     print ('Бот запущен')
     bot.infinity_polling()
