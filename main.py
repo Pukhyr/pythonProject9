@@ -78,14 +78,15 @@ def add_question(message):
 @bot.message_handler(commands=['delete_question'])
 def delete_question(message: telebot.types.Message):
     bot.set_state(message.from_user.id, MyStates.delete, message.chat.id)
-    bot.send_message(message.chat.id,'Выберите номер вопроса для удаления', get_question())
+    bot.send_message(message.chat.id,'Выберите номер вопроса для удаления')
+    bot.send_message(message.chat.id, get_question())
 
 @bot.message_handler(state=MyStates.delete)
 def add_question(message):
     bot.send_message(message.chat.id, "Вопрос, варианты ответа и статистика пользователей, ответивших на вопрос с этим номером, были удалены")
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['number'] = message.text
-        delete_question(data['number'])
+        delete_question(int(data['number']))
     bot.delete_state(message.from_user.id, message.chat.id)
 
 
