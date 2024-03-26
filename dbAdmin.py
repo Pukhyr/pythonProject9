@@ -96,7 +96,7 @@ def delete_questions(number:int):
         port=5432,
         user='note',
         password='1234',
-        dbname='test'
+        dbname='finalproject'
     )
     with conn.cursor() as cursor:
         cursor.execute("""DELETE FROM question WHERE id=(%d)""",(number, ))
