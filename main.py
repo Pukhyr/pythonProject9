@@ -86,7 +86,7 @@ def add_question(message):
     bot.send_message(message.chat.id, "Вопрос, варианты ответа и статистика пользователей, ответивших на вопрос с этим номером, были удалены")
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['number'] = message.text
-        delete_question(int(data['number']))
+        delete_question(data['number'])
     bot.delete_state(message.from_user.id, message.chat.id)
 
 
