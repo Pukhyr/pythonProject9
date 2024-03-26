@@ -85,8 +85,8 @@ def delete_question(message: telebot.types.Message):
 def add_question(message):
     bot.send_message(message.chat.id, "Вопрос, варианты ответа и статистика пользователей, ответивших на вопрос с этим номером, были удалены")
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['number'] = message.text
-        delete_questions(data['number'])
+        data['number'] =message.text
+        delete_questions(int(data['number']))
     bot.delete_state(message.from_user.id, message.chat.id)
 
 
