@@ -99,11 +99,24 @@ def delete_questions(number:int):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""DELETE FROM question WHERE id=(%d)""",(number, ))
-        cursor.execute("""DELETE FROM choice WHERE question_id=(%d)""",(number, ))
-        cursor.execute("""DELETE FROM user_stat WHERE question_id=(%d)""", (number, ))
+        cursor.execute("""DELETE FROM user_stat WHERE question_id=(%s)""", (number, ))
+        cursor.execute("""DELETE FROM choice WHERE question_id=(%s)""", (number,))
+        cursor.execute("""DELETE FROM question WHERE id=(%s)""", (number,))
         conn.commit()
     conn.close()
+
+def get_random():
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""SELECT * FROM question ORDER BY RAND() LIMIT 1""")
+        conn.commit()
+        conn.close()
 
 if __name__=='__main__':
     save_answer('lf', 1)

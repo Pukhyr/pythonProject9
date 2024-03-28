@@ -2,14 +2,15 @@ import datetime
 
 
 import telebot
-from telebot import custom_filters
+from telebot import custom_filters, types
+
 
 from telebot.handler_backends import State, StatesGroup
 from config import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
-from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions
+from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random
 
 
 class MyStates(StatesGroup):
@@ -30,12 +31,30 @@ def get_welcome() -> str:
     else:
         return 'Добрый вечер!'
 
-@bot.message_handler(commands=['start', 'help'])
-def start_help(message: telebot.types.Message):
-    text = f'{get_welcome()} Я бот, который подготовил для тебя интересный опрос✏\n\n'\
-           f'Список команд:\n'\
-           f'/get_all - получить общую статистику пользователей\n'\
-           f'/add_question- добавить вопрос \n'\
+@bot.message_handler(commands=['start'])
+def start(message: telebot.types.Message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = types.KeyboardButton("Вопрос")
+    markup.add(btn1)
+    text = f'{get_welcome()} Я бот, который подготовил для тебя интересный опрос✏, жми на кнопку, чтобы получить вопрос'
+    bot.send_message(message.chat.id, text, reply_markup=markup)
+
+@bot.message_handler(content_types=['text'])
+def get_random_question(message):
+    if(message.text == "Вопрос"):
+        bot.send_message(message.chat.id, get_random())
+    else:
+        pass
+bot.polling(none_stop=True)
+
+
+
+@bot.message_handler(commands=['help'])
+def help(message: telebot.types.Message):
+    text = f'{get_welcome()} Я бот, который подготовил для тебя интересный опрос✏\n\n' \
+           f'Список команд:\n' \
+           f'/get_all - получить общую статистику пользователей\n' \
+           f'/add_question- добавить вопрос \n' \
            f'/delete_question - удалить вопрос'
 
     bot.send_message(message.chat.id, text)
