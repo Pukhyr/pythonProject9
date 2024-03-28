@@ -115,8 +115,11 @@ def get_random():
     )
     with conn.cursor() as cursor:
         cursor.execute("""SELECT * FROM question ORDER BY RAND() LIMIT 1""")
+        all_records = cursor.fetchall()
+        print(str(all_records))
         conn.commit()
-        conn.close()
+    conn.close()
+    return str(all_records)
 
 if __name__=='__main__':
     save_answer('lf', 1)
