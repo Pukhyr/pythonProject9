@@ -114,7 +114,7 @@ def get_random():
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""SELECT * FROM question ORDER BY RAND() LIMIT 1""")
+        cursor.execute("""SELECT * FROM question ORDER BY RANDOM() LIMIT 1""")
         all_records = cursor.fetchall()
         print(str(all_records))
         conn.commit()
