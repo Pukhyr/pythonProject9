@@ -10,7 +10,7 @@ from config import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
-from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random
+from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random, get_choices
 
 
 class MyStates(StatesGroup):
@@ -93,7 +93,10 @@ def add_question(message):
 
 @bot.message_handler(commands=['get_random_question'])
 def get_rand(message: telebot.types.Message):
-    bot.send_message(message.chat.id, get_random())
+    record = get_random()
+    question_id = record[0]
+    bot.send_message(message.chat.id, str(record))
+    bot.send_message(message.chat.id, str(get_choices(question_id)))
 
 
 
