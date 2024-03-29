@@ -99,8 +99,8 @@ def get_rand(message: telebot.types.Message):
     ques=record[1]
     choic=get_choices(question_id)
     list=[]
-    for x,q,w,e in choic:
-        list.append((q ))
+    for x in choic:
+        list.append(x[1])
     bot.send_message(message.chat.id, str(ques))
     bot.send_message(message.chat.id, str(list))
 
