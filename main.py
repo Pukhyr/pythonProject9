@@ -10,7 +10,8 @@ from config import TOKEN
 
 bot = telebot.TeleBot(TOKEN)
 
-from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random
+from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random, \
+    get_choices
 
 
 class MyStates(StatesGroup):
@@ -38,7 +39,7 @@ def start_help(message: telebot.types.Message):
            f'/get_all - получить общую статистику пользователей\n' \
            f'/add_question- добавить вопрос \n' \
            f'/delete_question - удалить вопрос \n'\
-           f'/get_random_question - получить рандомный вопрос из базы \n'
+           f'/get_random_question - получить рандомный вопрос и варианты ответов \n'
     bot.send_message(message.chat.id, text)
 
 
@@ -93,7 +94,16 @@ def add_question(message):
 
 @bot.message_handler(commands=['get_random_question'])
 def get_rand(message: telebot.types.Message):
-    bot.send_message(message.chat.id, get_random())
+    record = get_random()
+    question_id = record[0]
+    ques=record[1]
+    choic=get_choices(question_id)
+    list=[]
+    for x,q,w,e in choic:
+        list.append((q ))
+    bot.send_message(message.chat.id, str(ques))
+    bot.send_message(message.chat.id, str(list))
+
 
 
 
