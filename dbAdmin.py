@@ -115,11 +115,27 @@ def get_random():
     )
     with conn.cursor() as cursor:
         cursor.execute("""SELECT * FROM question ORDER BY RANDOM() LIMIT 1""")
-        all_records = cursor.fetchall()
-        print(str(all_records))
-        conn.commit()
+        record = cursor.fetchone()
+        print(str(record))
     conn.close()
-    return str(all_records)
+    return record
+
+
+def get_choices(question_id):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute(f"""SELECT * FROM choices where question_id={question_id}""")
+        all_record = cursor.fetchall()
+        print(str(all_record))
+    conn.close()
+    return all_record
+
 
 if __name__=='__main__':
     save_answer('lf', 1)
