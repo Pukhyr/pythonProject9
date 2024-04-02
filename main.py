@@ -39,7 +39,7 @@ def start_help(message: telebot.types.Message):
            f'/get_all - получить общую статистику пользователей\n' \
            f'/add_question- добавить вопрос \n' \
            f'/delete_question - удалить вопрос \n'\
-           f'/get_random_question - получить рандомный вопрос и варианты ответов \n'
+           f'/get_random_question - получить рандомный вопрос и варианты ответов, чтобы ответить пришлите номер варианта ответа \n'
     bot.send_message(message.chat.id, text)
 
 
