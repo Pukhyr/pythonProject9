@@ -11,7 +11,7 @@ from config import TOKEN
 bot = telebot.TeleBot(TOKEN)
 
 from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random, \
-    get_choices
+    get_choices, save_votes
 
 
 class MyStates(StatesGroup):
@@ -94,10 +94,13 @@ def get_rand(message: telebot.types.Message):
     ques=record[1]
     choic=get_choices(question_id)
     list=[]
-    for x in choic:
-        list.append(x[1])
+    for q, w, e, r in choic:
+        list.append((q, w))
     bot.send_message(message.chat.id, str(ques))
     bot.send_message(message.chat.id, str(list))
+
+
+
 
 
 

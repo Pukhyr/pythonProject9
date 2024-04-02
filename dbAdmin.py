@@ -138,7 +138,7 @@ def get_choices(question_id):
     conn.close()
     return all_record
 
-def save_votes(id:int):
+def save_votes(id:str):
     conn = psycopg2.connect(
         host='localhost',
         port=5432,
@@ -147,7 +147,7 @@ def save_votes(id:int):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""UPDATE choice SET votes=vote+1 WHERE id=(%s)""", (id, ))
+        cursor.execute("""UPDATE choice SET votes=votes+1 WHERE choice_text=(%s)""", (id, ))
         conn.commit()
         conn.close()
 
