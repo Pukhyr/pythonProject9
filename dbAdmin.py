@@ -138,6 +138,20 @@ def get_choices(question_id):
     conn.close()
     return all_record
 
+def save_votes(id:int):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""UPDATE choice SET votes=vote+1 WHERE id=(%s)""", (id, ))
+        conn.commit()
+        conn.close()
+
+
 
 if __name__=='__main__':
     save_answer('lf', 1)
