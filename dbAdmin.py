@@ -59,9 +59,12 @@ def save_question(question_text:str ):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""INSERT INTO question (question_text) VALUES (%s)""", (question_text, ))
+        cursor.execute("""INSERT INTO question (question_text) VALUES (%s) RETURNING id""", (question_text, ))
+        id_of_new_row=cursor.fetchone()[0]
+        print (int(id_of_new_row))
         conn.commit()
-        conn.close()
+    conn.close()
+    return int(id_of_new_row)
 def save_answer(answers:str, question_id:int ):
     conn = psycopg2.connect(
         host='localhost',
@@ -71,7 +74,7 @@ def save_answer(answers:str, question_id:int ):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""INSERT INTO choice (choice_text, question_id) VALUES (%s, %s)""", (answers, question_id ))
+        cursor.execute("""INSERT INTO choice (choice_text, question_id) VALUES (%s, %s) """, (answers, question_id ))
         conn.commit()
         conn.close()
 def get_question():
