@@ -58,8 +58,10 @@ def add_question(message):
     bot.send_message(message.chat.id, "Отлично, теперь напишите варианты ответов на отдельных строчках и через ';' номер вопроса, к которому они относятся")
     bot.set_state(message.from_user.id, MyStates.answer, message.chat.id)
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['question'] = message.text
-        save_question(data['question'])
+        id=save_question(message.text)
+        data['question_id']=id
+
+
 
 @bot.message_handler(state=MyStates.answer)
 def add_question(message):
