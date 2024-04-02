@@ -98,6 +98,7 @@ def get_rand(message: telebot.types.Message):
         list.append((q, w))
     bot.send_message(message.chat.id, str(ques))
     bot.send_message(message.chat.id, str(list))
+    save_votes(int(message.text))
 
 
 
