@@ -65,11 +65,12 @@ def add_question(message):
 
 @bot.message_handler(state=MyStates.answer)
 def add_question(message):
-    bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['answers'] = message.text.split('\n')
-        for answer in data['answers']:
-            save_answer(answers=answer, question_id=data['question_id'])
+        question_id = data['question_id']
+    for answer in message.text.split('\n'):
+        save_answer(answers=answer, question_id=question_id)
+
+    bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
     bot.delete_state(message.from_user.id, message.chat.id)
 
 @bot.message_handler(commands=['delete_question'])
