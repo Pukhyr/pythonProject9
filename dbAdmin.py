@@ -74,7 +74,7 @@ def save_answer(answers:str, question_id:int):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""INSERT INTO choice (choice_text, question_id) VALUES (%s, %s, %s) """, (answers, question_id, 0 ))
+        cursor.execute("""INSERT INTO choice (choice_text, question_id, votes) VALUES (%s, %s, %s) """, (answers, question_id, 0 ))
         conn.commit()
         conn.close()
 def get_question():
