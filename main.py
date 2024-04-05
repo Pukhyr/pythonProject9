@@ -68,8 +68,9 @@ def add_question(message):
 def add_question(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         question_id = data['question_id']
+        null=0
     for answer in message.text.split('\n'):
-        save_answer(answers=answer, question_id=question_id)
+        save_answer(answers=answer, question_id=question_id, null=null)
 
     bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
     bot.delete_state(message.from_user.id, message.chat.id)
@@ -100,19 +101,12 @@ def get_rand(message: telebot.types.Message):
     bot.send_message(message.chat.id, str(ques))
     bot.send_message(message.chat.id, str(list))
     bot.set_state(message.from_user.id, MyStates.stattv, message.chat.id)
+
+
 @bot.message_handler(state=MyStates.stattv)
 def add_all(message):
+    save_votes(int(message.text))
     bot.send_message(message.chat.id, "Ваш голос добавлен")
-    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
-        data['voice'] =message.text
-        save_votes(int(data['voice']))
-    bot.delete_state(message.from_user.id, message.chat.id)
-
-
-
-
-
-
 
 
 
