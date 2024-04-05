@@ -151,6 +151,19 @@ def save_votes(id:int):
         conn.commit()
         conn.close()
 
+def user_stat(tgid:int, question_id:int, choice_id:int):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""INSERT INTO choice (tg_use_id, question_id, choice_id) VALUES (%s, %s, %s) """, (tgid, question_id, choice_id ))
+        conn.commit()
+        conn.close()
+
 
 
 if __name__=='__main__':

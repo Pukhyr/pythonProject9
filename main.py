@@ -11,7 +11,7 @@ from config import TOKEN
 bot = telebot.TeleBot(TOKEN)
 
 from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random, \
-    get_choices, save_votes
+    get_choices, save_votes, user_stat
 
 
 class MyStates(StatesGroup):
@@ -104,6 +104,8 @@ def get_rand(message: telebot.types.Message):
 @bot.message_handler(state=MyStates.stattv)
 def add_all(message):
     save_votes(int(message.text))
+    userid=message.chat.id
+    user_stat(int(userid),int() , int(message.text))
     bot.send_message(message.chat.id, "Ваш голос добавлен")
 
 
