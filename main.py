@@ -68,10 +68,8 @@ def add_question(message):
 def add_question(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         question_id = data['question_id']
-        null=0
     for answer in message.text.split('\n'):
-        save_answer(answers=answer, question_id=question_id, null=null)
-
+        save_answer(answers=answer, question_id=question_id)
     bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
     bot.delete_state(message.from_user.id, message.chat.id)
 

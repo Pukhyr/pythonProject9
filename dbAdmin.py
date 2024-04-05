@@ -65,7 +65,7 @@ def save_question(question_text:str ):
         conn.commit()
     conn.close()
     return int(id_of_new_row)
-def save_answer(answers:str, question_id:int, null:int ):
+def save_answer(answers:str, question_id:int):
     conn = psycopg2.connect(
         host='localhost',
         port=5432,
@@ -74,7 +74,7 @@ def save_answer(answers:str, question_id:int, null:int ):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""INSERT INTO choice (choice_text, question_id) VALUES (%s, %s, %s) """, (answers, question_id, null ))
+        cursor.execute("""INSERT INTO choice (choice_text, question_id) VALUES (%s, %s, %s) """, (answers, question_id, 0 ))
         conn.commit()
         conn.close()
 def get_question():
