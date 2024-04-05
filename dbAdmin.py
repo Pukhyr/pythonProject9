@@ -160,7 +160,7 @@ def user_stat(tgid:int, question_id:int, choice_id:int):
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""INSERT INTO choice (tg_use_id, question_id, choice_id) VALUES (%s, %s, %s) """, (tgid, question_id, choice_id ))
+        cursor.execute("""INSERT INTO user_stat (tg_user_id, question_id, choice_id) VALUES (%s, %s, %s) """, (tgid, question_id, choice_id ))
         conn.commit()
         conn.close()
 
