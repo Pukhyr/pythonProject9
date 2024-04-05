@@ -18,6 +18,7 @@ class MyStates(StatesGroup):
     question = State()
     answer= State()
     delete= State()
+    stattv= State()
 
 
 
@@ -98,8 +99,16 @@ def get_rand(message: telebot.types.Message):
         list.append((q, w))
     bot.send_message(message.chat.id, str(ques))
     bot.send_message(message.chat.id, str(list))
-    otvet=message.text
-    save_votes(int(otvet))
+    bot.set_state(message.from_user.id, MyStates.stattv, message.chat.id)
+@bot.message_handler(state=MyStates.stattv)
+def add_all(message):
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        data['voice'] =message.text
+        save_votes(int(data['voice']))
+    bot.delete_state(message.from_user.id, message.chat.id)
+
+
+
 
 
 
