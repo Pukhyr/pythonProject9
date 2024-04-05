@@ -111,7 +111,8 @@ def add_all(message):
     with bot.retrieve_data(message.from_user.id) as data:
         question_id=data['question_id']
     user_stat(tgid=int(userid),question_id=int(question_id) , choice_id=int(message.text))
-    bot.send_message(message.chat.id, "Ваш голос добавлен")
+    bot.send_message(message.chat.id, "Ваш голос был добавлен")
+    bot.delete_state(message.from_user.id, message.chat.id)
 
 
 
