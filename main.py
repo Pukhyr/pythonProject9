@@ -11,7 +11,7 @@ from config import TOKEN
 bot = telebot.TeleBot(TOKEN)
 
 from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random, \
-    get_choices, save_votes, user_stat
+    get_choices, save_votes, user_stat, get_own, get_own_ques, get_own_choice
 
 
 class MyStates(StatesGroup):
@@ -40,7 +40,8 @@ def start_help(message: telebot.types.Message):
            f'/get_all - получить общую статистику пользователей\n' \
            f'/add_question- добавить вопрос \n' \
            f'/delete_question - удалить вопрос \n'\
-           f'/get_random_question - получить рандомный вопрос и варианты ответов, чтобы ответить пришлите номер варианта ответа \n'
+           f'/get_random_question - получить рандомный вопрос и варианты ответов, чтобы ответить пришлите номер варианта ответа \n'\
+           f'/get_my_own_stat - получить личную статистику'
     bot.send_message(message.chat.id, text)
 
 
@@ -114,6 +115,21 @@ def add_all(message):
     bot.send_message(message.chat.id, "Ваш голос был добавлен")
     bot.delete_state(message.from_user.id, message.chat.id)
 
+
+@bot.message_handler(commands=['get_my_own_stat'])
+def own_stat(message):
+    userid=message.chat.id
+    own=get_own(int(userid))
+    for i in own:
+        que=i[0]
+        cho=i[1]
+        ques=get_own_ques(que)
+        choc=get_own_choice(cho)
+        ques_choc=f'{ques}...............{choc}'
+        bot.send_message(message.chat.id, ques_choc)
+
+        #bot.send_message(message.chat.id, get_own_ques(que))
+        #bot.send_message(message.chat.id, get_own_choice(cho))
 
 
 

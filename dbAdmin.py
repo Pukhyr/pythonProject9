@@ -163,8 +163,49 @@ def user_stat(tgid:int, question_id:int, choice_id:int):
         cursor.execute("""INSERT INTO user_stat (tg_user_id, question_id, choice_id) VALUES (%s, %s, %s) """, (tgid, question_id, choice_id ))
         conn.commit()
         conn.close()
+def get_own(tg_user:int):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""SELECT question_id, choice_id FROM user_stat WHERE tg_user_id=(%s) """, (tg_user,))
+        all_record = cursor.fetchall()
+        print(str(all_record))
+    conn.close()
+    return all_record
 
-
+def get_own_ques(id:int):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""SELECT question_text FROM question WHERE id=(%s) """, (id,))
+        all_record = cursor.fetchall()
+        print(str(all_record))
+    conn.close()
+    return all_record
+def get_own_choice(id:int):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""SELECT choice_text FROM choice WHERE id=(%s) """, (id,))
+        all_record = cursor.fetchall()
+        print(str(all_record))
+    conn.close()
+    return all_record
 
 if __name__=='__main__':
     save_answer('lf', 1)
