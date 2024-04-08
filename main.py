@@ -55,6 +55,40 @@ def get_all(message: telebot.types.Message):
     bot.send_message(message.chat.id, 'Напишите вопрос')
 
 
+@bot.message_handler(commands=['delete_question'])
+def delete_question(message: telebot.types.Message):
+    bot.set_state(message.from_user.id, MyStates.delete, message.chat.id)
+    bot.send_message(message.chat.id,'Выберите номер вопроса для удаления')
+    bot.send_message(message.chat.id, get_question())
+
+@bot.message_handler(commands=['get_random_question'])
+def get_rand(message: telebot.types.Message):
+    record = get_random()
+    question_id = record[0]
+    ques=record[1]
+    choic=get_choices(question_id)
+    list=[]
+    for q, w, e, r in choic:
+        list.append((q, w))
+    bot.send_message(message.chat.id, str(ques))
+    bot.send_message(message.chat.id, str(list))
+    bot.set_state(message.from_user.id, MyStates.stattv, message.chat.id)
+    with bot.retrieve_data(message.from_user.id) as data:
+        data['question_id']=question_id
+
+@bot.message_handler(commands=['get_my_own_stat'])
+def own_stat(message):
+    userid=message.chat.id
+    own=get_own(int(userid))
+    s=''
+    for i in own:
+        que=i[0]
+        cho=i[1]
+        ques=get_own_ques(que)
+        choc=get_own_choice(cho)
+        s+=f'Вопрос: {ques[0]}...............Ваш ответ: {choc[0]}\n'
+    bot.send_message(message.chat.id, s)
+
 @bot.message_handler(state=MyStates.question)
 def add_question(message):
     bot.send_message(message.chat.id, "Отлично, теперь напишите варианты ответов на отдельных строчках")
@@ -74,12 +108,6 @@ def add_question(message):
     bot.send_message(message.chat.id, "Варианты ответа были успешно добавлены")
     bot.delete_state(message.from_user.id, message.chat.id)
 
-@bot.message_handler(commands=['delete_question'])
-def delete_question(message: telebot.types.Message):
-    bot.set_state(message.from_user.id, MyStates.delete, message.chat.id)
-    bot.send_message(message.chat.id,'Выберите номер вопроса для удаления')
-    bot.send_message(message.chat.id, get_question())
-
 @bot.message_handler(state=MyStates.delete)
 def add_question(message):
     bot.send_message(message.chat.id, "Вопрос, варианты ответа и статистика пользователей, ответивших на вопрос с этим номером, были удалены")
@@ -87,23 +115,6 @@ def add_question(message):
         data['number'] =message.text
         delete_questions(int(data['number']))
     bot.delete_state(message.from_user.id, message.chat.id)
-
-@bot.message_handler(commands=['get_random_question'])
-def get_rand(message: telebot.types.Message):
-    record = get_random()
-    question_id = record[0]
-    ques=record[1]
-    choic=get_choices(question_id)
-    list=[]
-    for q, w, e, r in choic:
-        list.append((q, w))
-    bot.send_message(message.chat.id, str(ques))
-    bot.send_message(message.chat.id, str(list))
-    bot.set_state(message.from_user.id, MyStates.stattv, message.chat.id)
-    with bot.retrieve_data(message.from_user.id) as data:
-        data['question_id']=question_id
-
-
 
 @bot.message_handler(state=MyStates.stattv)
 def add_all(message):
@@ -114,21 +125,6 @@ def add_all(message):
     user_stat(tgid=int(userid),question_id=int(question_id) , choice_id=int(message.text))
     bot.send_message(message.chat.id, "Ваш голос был добавлен")
     bot.delete_state(message.from_user.id, message.chat.id)
-
-
-@bot.message_handler(commands=['get_my_own_stat'])
-def own_stat(message):
-    userid=message.chat.id
-    own=get_own(int(userid))
-    s=''
-    for i in own:
-        que=i[0]
-        cho=i[1]
-        ques=get_own_ques(que)
-        choc=get_own_choice(cho)
-        s+=f'Вопрос: {ques[0]}...............Ваш ответ: {choc[0]}\n'
-    bot.send_message(message.chat.id, s)
-
 
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))
