@@ -125,7 +125,7 @@ def own_stat(message):
         cho=i[1]
         ques=get_own_ques(que)
         choc=get_own_choice(cho)
-        ques_choc=f'Вопрос: {ques}...............Ваш ответ: {choc}'
+        ques_choc=f'Вопрос: {ques[0]}...............Ваш ответ: {choc[0]}'
         bot.send_message(message.chat.id, ques_choc)
 
 

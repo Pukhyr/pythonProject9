@@ -188,7 +188,7 @@ def get_own_ques(id:int):
     )
     with conn.cursor() as cursor:
         cursor.execute("""SELECT question_text FROM question WHERE id=(%s) """, (id,))
-        all_record = cursor.fetchall()
+        all_record = cursor.fetchone()
         print(str(all_record))
     conn.close()
     return all_record
@@ -202,7 +202,7 @@ def get_own_choice(id:int):
     )
     with conn.cursor() as cursor:
         cursor.execute("""SELECT choice_text FROM choice WHERE id=(%s) """, (id,))
-        all_record = cursor.fetchall()
+        all_record = cursor.fetchone()
         print(str(all_record))
     conn.close()
     return all_record
