@@ -120,13 +120,14 @@ def add_all(message):
 def own_stat(message):
     userid=message.chat.id
     own=get_own(int(userid))
+    s=''
     for i in own:
         que=i[0]
         cho=i[1]
         ques=get_own_ques(que)
         choc=get_own_choice(cho)
-        ques_choc=f'Вопрос: {ques[0]}...............Ваш ответ: {choc[0]}'
-        bot.send_message(message.chat.id, ques_choc)
+        s+=f'Вопрос: {ques[0]}...............Ваш ответ: {choc[0]}\n'
+    bot.send_message(message.chat.id, s)
 
 
 
