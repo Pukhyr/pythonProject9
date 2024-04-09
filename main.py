@@ -47,10 +47,19 @@ def start_help(message: telebot.types.Message):
 
 @bot.message_handler(commands=['get_all'])
 def get_all(message: telebot.types.Message):
-    bot.send_message(message.chat.id,get_user_stat())
+    all=get_user_stat()
+    t=''
+    for i in all:
+        idtg=i[1]
+        idque=i[2]
+        idch=i[3]
+        sque=get_own_ques(idque)
+        sch=get_own_choice(idch)
+        t+=f'Id пользователя: {idtg[0]}, вопрос: {sque[0]}, ответ: {sch[0]}\n'
+    bot.send_message(message.chat.id, t)
 
 @bot.message_handler(commands=['add_question'])
-def get_all(message: telebot.types.Message):
+def add_ques(message: telebot.types.Message):
     bot.set_state(message.from_user.id, MyStates.question, message.chat.id)
     bot.send_message(message.chat.id, 'Напишите вопрос')
 
@@ -59,7 +68,13 @@ def get_all(message: telebot.types.Message):
 def delete_question(message: telebot.types.Message):
     bot.set_state(message.from_user.id, MyStates.delete, message.chat.id)
     bot.send_message(message.chat.id,'Выберите номер вопроса для удаления')
-    bot.send_message(message.chat.id, get_question())
+    quess=get_question()
+    s=''
+    for i in quess:
+        num=i[0]
+        q=i[1]
+        s+=f'Номер: {num}, вопрос: {q}\n'
+    bot.send_message(message.chat.id, s)
 
 @bot.message_handler(commands=['get_random_question'])
 def get_rand(message: telebot.types.Message):
