@@ -55,7 +55,7 @@ def get_all(message: telebot.types.Message):
         idch=i[3]
         sque=get_own_ques(idque)
         sch=get_own_choice(idch)
-        t+=f'Id пользователя: {idtg[0]}, вопрос: {sque[0]}, ответ: {sch[0]}\n'
+        t+=f'Id пользователя: {idtg}, вопрос: "{sque[0]}", ответ: "{sch[0]}"\n'
     bot.send_message(message.chat.id, t)
 
 @bot.message_handler(commands=['add_question'])

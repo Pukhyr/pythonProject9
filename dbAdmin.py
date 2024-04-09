@@ -48,7 +48,7 @@ def get_user_stat():
         print (str(all_records))
         conn.commit()
     conn.close()
-    return str(all_records)
+    return all_records
 
 def save_question(question_text:str ):
     conn = psycopg2.connect(
@@ -91,7 +91,7 @@ def get_question():
         print (str(all_records))
         conn.commit()
     conn.close()
-    return str(all_records)
+    return all_records
 
 def delete_questions(number:int):
     conn = psycopg2.connect(
