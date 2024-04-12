@@ -108,7 +108,7 @@ def delete_questions(number:int):
         conn.commit()
     conn.close()
 
-def get_random():
+def get_random(id:int):
     conn = psycopg2.connect(
         host='localhost',
         port=5432,
@@ -117,7 +117,7 @@ def get_random():
         dbname='finalproject'
     )
     with conn.cursor() as cursor:
-        cursor.execute("""SELECT * FROM question ORDER BY RANDOM() LIMIT 1""")
+        cursor.execute("""SELECT question_text FROM question WHERE id=(%s)""", (id, ))
         record = cursor.fetchone()
         print(str(record))
     conn.close()
@@ -206,6 +206,21 @@ def get_own_choice(id:int):
         print(str(all_record))
     conn.close()
     return all_record
+def answered(question_id:int):
+    conn = psycopg2.connect(
+        host='localhost',
+        port=5432,
+        user='note',
+        password='1234',
+        dbname='finalproject'
+    )
+    with conn.cursor() as cursor:
+        cursor.execute("""SELECT question_id FROM user_stat WHERE tg_user_id=(%s)""", (question_id, ))
+        all_records=cursor.fetchall()
+        print (str(all_records))
+        conn.commit()
+    conn.close()
+    return all_records
 
 if __name__=='__main__':
     save_answer('lf', 1)

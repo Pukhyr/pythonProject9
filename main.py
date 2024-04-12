@@ -1,5 +1,5 @@
 import datetime
-
+import random
 
 import telebot
 from telebot import custom_filters
@@ -11,7 +11,7 @@ from config import TOKEN
 bot = telebot.TeleBot(TOKEN)
 
 from dbAdmin import createdb, get_user_stat, save_question, save_answer, get_question, delete_questions, get_random, \
-    get_choices, save_votes, user_stat, get_own, get_own_ques, get_own_choice
+    get_choices, save_votes, user_stat, get_own, get_own_ques, get_own_choice, answered
 
 
 class MyStates(StatesGroup):
@@ -93,19 +93,35 @@ def delete_question(message: telebot.types.Message):
 
 
 @bot.message_handler(commands=['get_random_question'])
-def get_rand(message: telebot.types.Message):
-    record = get_random()
-    question_id = record[0]
-    ques=record[1]
-    choic=get_choices(question_id)
-    list=[]
-    for q, w, e, r in choic:
-        list.append((q, w))
-    bot.send_message(message.chat.id, str(ques))
-    bot.send_message(message.chat.id, str(list))
+def get_rando(message: telebot.types.Message):
+    tid=message.from_user.id
+    answer=answered(tid)
+    a=[]
+    for i in answer:
+        y=i[0]
+        a.append(y)
+    allid1=get_question()
+    al=[]
+    for t in allid1:
+        r=t[0]
+        al.append(r)
+    an=set(a)
+    qe=set(al)
+    allowed=list(qe-an)
+    queid=random.choice(allowed)
+    questoin_rand=get_random(queid)
+    choic = get_choices(queid)
+    s=[]
+    for q in choic:
+        idc=q[0]
+        techo=q[1]
+        s+=f'Номер варианта ответа: {idc}, ответ: {techo}\n'
+    bot.send_message(message.chat.id, questoin_rand)
+    bot.send_message(message.chat.id, s)
     bot.set_state(message.from_user.id, MyStates.stattv, message.chat.id)
     with bot.retrieve_data(message.from_user.id) as data:
-        data['question_id']=question_id
+        data['question_id'] = queid
+
 
 @bot.message_handler(commands=['get_my_own_stat'])
 def own_stat(message):
