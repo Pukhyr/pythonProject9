@@ -111,7 +111,7 @@ def get_rando(message: telebot.types.Message):
     queid=random.choice(allowed)
     questoin_rand=get_random(queid)
     choic = get_choices(queid)
-    s=[]
+    s=''
     for q in choic:
         idc=q[0]
         techo=q[1]
