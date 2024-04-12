@@ -21,7 +21,6 @@ class MyStates(StatesGroup):
     stattv= State()
 
 
-
 def get_welcome() -> str:
     current_time = datetime.datetime.now()
     if 0<= current_time.hour <6:
@@ -33,13 +32,19 @@ def get_welcome() -> str:
     else:
         return 'Добрый вечер!'
 
+
+ADMIN_IDS = [234567890]
+
+
 @bot.message_handler(commands=['start','help'])
 def start_help(message: telebot.types.Message):
     text = f'{get_welcome()} Я бот, который подготовил для тебя интересный опрос✏\n\n' \
            f'Список команд:\n' \
+           f'Для админов:\n' \
            f'/get_all - получить общую статистику пользователей\n' \
            f'/add_question- добавить вопрос \n' \
            f'/delete_question - удалить вопрос \n'\
+           f'Для пользователей:\n' \
            f'/get_random_question - получить рандомный вопрос и варианты ответов, чтобы ответить пришлите номер варианта ответа \n'\
            f'/get_my_own_stat - получить личную статистику'
     bot.send_message(message.chat.id, text)
@@ -47,34 +52,45 @@ def start_help(message: telebot.types.Message):
 
 @bot.message_handler(commands=['get_all'])
 def get_all(message: telebot.types.Message):
-    all=get_user_stat()
-    t=''
-    for i in all:
-        idtg=i[1]
-        idque=i[2]
-        idch=i[3]
-        sque=get_own_ques(idque)
-        sch=get_own_choice(idch)
-        t+=f'Id пользователя: {idtg}, вопрос: "{sque[0]}", ответ: "{sch[0]}"\n'
-    bot.send_message(message.chat.id, t)
+    if message.from_user.id in ADMIN_IDS:
+        all=get_user_stat()
+        t=''
+        for i in all:
+            idtg=i[1]
+            idque=i[2]
+            idch=i[3]
+            sque=get_own_ques(idque)
+            sch=get_own_choice(idch)
+            t+=f'Id пользователя: {idtg}, вопрос: "{sque[0]}", ответ: "{sch[0]}"\n'
+        bot.send_message(message.chat.id, t)
+    else:
+        bot.send_message(message.chat.id, "Нет прав")
+
 
 @bot.message_handler(commands=['add_question'])
 def add_ques(message: telebot.types.Message):
-    bot.set_state(message.from_user.id, MyStates.question, message.chat.id)
-    bot.send_message(message.chat.id, 'Напишите вопрос')
+    if message.from_user.id in ADMIN_IDS:
+        bot.set_state(message.from_user.id, MyStates.question, message.chat.id)
+        bot.send_message(message.chat.id, 'Напишите вопрос')
+    else:
+        bot.send_message(message.chat.id, "Нет прав")
 
 
 @bot.message_handler(commands=['delete_question'])
 def delete_question(message: telebot.types.Message):
-    bot.set_state(message.from_user.id, MyStates.delete, message.chat.id)
-    bot.send_message(message.chat.id,'Выберите номер вопроса для удаления')
-    quess=get_question()
-    s=''
-    for i in quess:
-        num=i[0]
-        q=i[1]
-        s+=f'Номер: {num}, вопрос: {q}\n'
-    bot.send_message(message.chat.id, s)
+    if message.from_user.id in ADMIN_IDS:
+        bot.set_state(message.from_user.id, MyStates.delete, message.chat.id)
+        bot.send_message(message.chat.id,'Выберите номер вопроса для удаления')
+        quess=get_question()
+        s=''
+        for i in quess:
+            num=i[0]
+            q=i[1]
+            s+=f'Номер: {num}, вопрос: {q}\n'
+            bot.send_message(message.chat.id, s)
+    else:
+        bot.send_message(message.chat.id, "Нет прав")
+
 
 @bot.message_handler(commands=['get_random_question'])
 def get_rand(message: telebot.types.Message):
