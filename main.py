@@ -95,15 +95,9 @@ def delete_question(message: telebot.types.Message):
 def get_rando(message: telebot.types.Message):
     tid = message.from_user.id
     answer = answered(tid)
-    a = []
-    for i in answer:
-        y = i[0]
-        a.append(y)
+    a = list(map(lambda x: x[0], answer))
     allid1 = get_question()
-    al = []
-    for t in allid1:
-        r = t[0]
-        al.append(r)
+    al = list(map(lambda t: t[0], allid1))
     an = set(a)
     qe = set(al)
     allowed = list(qe-an)
@@ -178,6 +172,5 @@ def add_all(message):
 bot.add_custom_filter(custom_filters.StateFilter(bot))
 
 if __name__ == '__main__':
-    createdb()
     print('Бот запущен')
     bot.infinity_polling()
